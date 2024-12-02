@@ -1,34 +1,4 @@
-# Ecommerce Admin
 
-![Ecommerce-admin](https://i.postimg.cc/rczsW-CB4/ecommerce-admin.png)
-
-### [Live Site](https://ecommerce-admin-iota-sepia.vercel.app/)
-
-## Introduction
-Full Stack E-Commerce + Dashboard & CMS: Next.js 13 App Router, React, Tailwind, Prisma, MySQL, Clerk Auth.
-
-The e-commerce admin dashboard is a user interface specifically designed to manage and control the operations of an online store or e-commerce platform.
-
-### Tech Stack 💻 :
-- NextJS
-- React
-- TailwindCSS
-- Mysql
-- Prisma
-- Clerk Auth
-- ShadcnUI
-
-### Cloning the repository
-
-```shell
-git clone https://github.com/inifarhan/ecommerce-admin.git
-```
-
-### Install packages
-
-```shell
-npm i
-```
 
 ### Setup .env file
 
@@ -59,6 +29,18 @@ STRIPE_WEBHOOK_SECRET=
 
 ```shell
 npm run dev
+```
+
+
+### Create the database
+
+make sure you have a DATABASE_URL in .env for your mysql database, syntax see https://www.prisma.io/docs/orm/overview/databases/mysql 
+
+
+```bash
+npx prisma init # not neceassary in this case , already done
+npx prisma generate
+npx prisma migrate dev --name init
 ```
 
 ## Available commands
