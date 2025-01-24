@@ -139,3 +139,106 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
 }
+
+model Organisation {
+  OrganisationId Int       @id @default(autoincrement())
+  Name           String
+  Address        String? // Nullable
+  PostalCode     String? // Nullable
+  City           String? // Nullable
+  Phone          String? // Nullable
+  Email          String? // Nullable
+  Url            String? // Nullable
+  Contact        String? // Nullable
+  Projects       Project[] @relation("OrganisationProjects") // Added opposite relation
+}
+
+model Proposal {
+  ProposalId     Int             @id @default(autoincrement())
+  Title          String
+  Description    String? // Nullable
+  Origin         String? // Nullable
+  Projects       Project[] @relation("ProposalProjects") // Added opposite relation
+  ProposalTopics ProposalTopic[]
+}
+
+model Topic {
+  TopicId        Int             @id @default(autoincrement())
+  Name           String? // Nullable
+  Description    String? // Nullable
+  ProposalTopics ProposalTopic[]
+  TopicUsers     TopicUser[]
+  ProjectTopics  ProjectTopic[]
+}
+
+model User {
+  UserId         Int             @id @default(autoincrement())
+  Sub            String? // Nullable
+  UserName       String? // Nullable
+  GivenName      String? // Nullable
+  FamilyName     String? // Nullable
+  Picture        String? // Nullable
+  Name           String? // Nullable
+  NickName       String? // Nullable
+  Password       String? // Nullable
+  Email          String? // Nullable
+  Application    String? // Nullable
+  EmailVerified  Boolean? // Nullable
+  ProgramType    String? // Nullable
+  UserLevel      String? // Nullable
+  Expertise      String? // Nullable
+  ProjectsAsCoach Project[] @relation("CoachProjects")
+  ProjectsAsStudent Project[] @relation("StudentProjects")
+  TopicUsers     TopicUser[]
+}
+
+model ProposalTopic {
+  ProposalsProposalId Int
+  TopicsTopicId       Int
+  Proposal            Proposal @relation(fields: [ProposalsProposalId], references: [ProposalId], onDelete: Cascade)
+  Topic               Topic    @relation(fields: [TopicsTopicId], references: [TopicId], onDelete: Cascade)
+
+  @@id([ProposalsProposalId, TopicsTopicId])
+}
+
+model Project {
+  ProjectId       Int          @id @default(autoincrement())
+  CreatedAt       DateTime? // Nullable
+  UpdatedAt       DateTime? // Nullable
+  Title           String? // Nullable
+  Description     String? // Nullable
+  Stage           String? // Nullable
+  Active          Boolean? // Nullable
+  Supported       Boolean? // Nullable
+  Reviewed        Boolean? // Nullable
+  Approved        Boolean? // Nullable
+  Feedback        String? // Nullable
+  StudentId       Int? // Nullable
+  CoachId         Int? // Nullable
+  OrganisationId  Int? // Nullable
+  ProposalId      Int? // Nullable
+
+  Organisation    Organisation? @relation("OrganisationProjects", fields: [OrganisationId], references: [OrganisationId], map: "FK_Project_Organisation")
+  Proposal        Proposal? @relation("ProposalProjects", fields: [ProposalId], references: [ProposalId], map: "FK_Project_Proposal")
+  Coach           User? @relation("CoachProjects", fields: [CoachId], references: [UserId], map: "FK_Project_Coach")
+  Student         User? @relation("StudentProjects", fields: [StudentId], references: [UserId], map: "FK_Project_Student")
+  ProjectTopics   ProjectTopic[]
+}
+
+model TopicUser {
+  TopicsTopicId   Int
+  UsersUserId     Int
+  Topic           Topic @relation(fields: [TopicsTopicId], references: [TopicId], onDelete: Cascade)
+  User            User  @relation(fields: [UsersUserId], references: [UserId], onDelete: Cascade)
+
+  @@id([TopicsTopicId, UsersUserId])
+}
+
+model ProjectTopic {
+  ProjectsProjectId Int
+  TopicsTopicId     Int
+  Project           Project @relation(fields: [ProjectsProjectId], references: [ProjectId], onDelete: Cascade)
+  Topic             Topic   @relation(fields: [TopicsTopicId], references: [TopicId], onDelete: Cascade)
+
+  @@id([ProjectsProjectId, TopicsTopicId])
+}

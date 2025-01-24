@@ -16,10 +16,10 @@ import {
 import { Button } from "@/components/ui/button"
 import { AlertModal } from "@/components/modals/alert-modal"
 
-import { SizeColumn } from "./columns"
+import { TopicColumn } from "./columns"
 
 interface CellActionProps {
-  data: SizeColumn
+  data: TopicColumn
 }
 
 export const CellAction: React.FC<CellActionProps> = ({
@@ -31,9 +31,9 @@ export const CellAction: React.FC<CellActionProps> = ({
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
 
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id)
-    toast.success("Size Id copied to the clipboard")
+  const onCopy = (id: number) => {
+    navigator.clipboard.writeText(id.toString())
+    toast.success("Topic Id copied to the clipboard")
   }
 
   const onDelete = async () => {
@@ -41,9 +41,9 @@ export const CellAction: React.FC<CellActionProps> = ({
       setLoading(true)
       await axios.delete(`/api/${params.storeId}/sizes/${data.id}`)
       router.refresh()
-      toast.success("Size deleted.")
+      toast.success("Topic deleted.")
     } catch (error) {
-      toast.error("Make sure you removed all products using this size first.")
+      toast.error("Make sure you removed all products using this topic first.")
     } finally {
       setLoading(false)
       setOpen(false)
